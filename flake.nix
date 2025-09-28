@@ -1,23 +1,12 @@
 {
   description = "My Extra Packages";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable?shallow=1";
-    trivnixLib = {
-      url = "github:Trivaris/TrivnixLib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
+  inputs.trivnixLib.url = "github:Trivaris/TrivnixLib";
 
   outputs =
-    {
-      nixpkgs,
-      trivnixLib,
-      self,
-    }:
+    { trivnixLib, self }:
     let
-      inherit (nixpkgs.lib) mapAttrs' nameValuePair;
-      trivLib = trivnixLib.lib.for self;
+      trivLib = trivnixLib.lib.for { selfArg = self; };
     in
     {
       overlays =
@@ -33,10 +22,14 @@
           };
         in
         {
-          default = self.overlays.additions // self.overlays.modifications;
+          default =
+            final: prev: (self.overlays.additions final prev) // (self.overlays.modifications final prev);
 
           additions =
             _: pkgs:
+            let
+              inherit (pkgs.lib) mapAttrs' nameValuePair;
+            in
             {
               modpacks = {
                 elysiumDays = pkgs.callPackage ./mkModpack.nix {
@@ -58,6 +51,9 @@
 
           modifications =
             _: pkgs:
+            let
+              inherit (pkgs.lib) mapAttrs' nameValuePair;
+            in
             mapAttrs' (
               name: path:
               (nameValuePair name (pkgs.${name}.overrideAttrs (_: import ./overrides/${path} { inherit pkgs; })))
