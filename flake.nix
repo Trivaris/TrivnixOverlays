@@ -11,19 +11,23 @@
     {
       overlays =
         let
-          extraPkgs = trivLib.resolveDir {
-            dirPath = ./packages;
-            preset = "namePathMap";
-          };
+          mkDrvs =
+            path:
+            trivLib.resolveDir {
+              dirPath = path;
+              preset = "namePathMap";
+            };
 
-          extraOverrides = trivLib.resolveDir {
-            dirPath = ./overrides;
-            preset = "namePathMap";
-          };
+          additionDrvs = mkDrvs ./additions;
+          overrideDrvs = mkDrvs ./overrides;
+          additionPyDrvs = mkDrvs ./python/additions;
+          overridePyDrvs = mkDrvs ./python.overrides;
         in
         {
-          default =
-            final: prev: (self.overlays.additions final prev) // (self.overlays.modifications final prev);
+          default = final: prev: (self.overlays.additions final prev) // (self.overlays.overrides final prev);
+
+          python =
+            final: prev: (self.overlays.pyAddtions final prev) // (self.overlays.pyOverrides final prev);
 
           additions =
             _: pkgs:
@@ -46,10 +50,10 @@
               };
             }
             // (mapAttrs' (
-              name: path: (nameValuePair name (pkgs.callPackage ./packages/${path} { inherit pkgs; }))
-            ) extraPkgs);
+              name: path: (nameValuePair name (pkgs.callPackage ./additions/${path} { inherit pkgs; }))
+            ) additionDrvs);
 
-          modifications =
+          overrides =
             _: pkgs:
             let
               inherit (pkgs.lib) mapAttrs' nameValuePair;
@@ -57,7 +61,36 @@
             mapAttrs' (
               name: path:
               (nameValuePair name (pkgs.${name}.overrideAttrs (_: import ./overrides/${path} { inherit pkgs; })))
-            ) extraOverrides;
+            ) overrideDrvs;
+
+          pyAddtions =
+            _: pkgs:
+            let
+              inherit (pkgs.lib) mapAttrs' nameValuePair;
+            in
+            {
+              python13Packages =
+                pkgs.python13Packages
+                // (mapAttrs' (
+                  name: path: (nameValuePair name (pkgs.callPackage ./python/additions/${path} { inherit pkgs; }))
+                ) additionPyDrvs);
+            };
+
+          pyOverrides =
+            _: pkgs:
+            let
+              inherit (pkgs.lib) mapAttrs' nameValuePair;
+            in
+            {
+              python13Packages =
+                pkgs.python13Packages
+                // (mapAttrs' (
+                  name: path:
+                  (nameValuePair name (
+                    pkgs.python13Packages.${name}.overrideAttrs (_: import ./python/overrides/${path} { inherit pkgs; })
+                  ))
+                ) overridePyDrvs);
+            };
         };
     };
 }
