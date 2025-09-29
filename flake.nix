@@ -2,33 +2,35 @@
   description = "My Extra Packages";
 
   inputs.trivnixLib.url = "github:Trivaris/TrivnixLib";
-  # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
   
   outputs =
     {
       trivnixLib,
-      # nixpkgs,
+      nixpkgs,
       self,
     }:
     let
       trivLib = trivnixLib.lib.for { selfArg = self; };
     in
     {
-/*
+/**/
       packages.x86_64-linux =
         let
           system = "x86_64-linux";
           pkgs = import nixpkgs {
             inherit system;
             overlays = [
-              self.overlays.pyAddtions
+              self.overlays.pyAdditions
             ];
           };
         in
         {
-          inherit (pkgs.python313Packages) av adbutils;
+          python313Packages = {
+            inherit (pkgs.python313Packages) av_15 adbutils;
+          };
         };
-*/
+/**/
 
       overlays =
         let

@@ -2,7 +2,7 @@
 let
   av = {
     pname = "av";
-    version = "15.0.0";
+    version = "15.1.0";
     pyproject = true;
 
     disabled = pkgs.python313Packages.pythonOlder "3.9";
@@ -11,7 +11,7 @@ let
       owner = "PyAV-Org";
       repo = "PyAV";
       rev = "v${av.version}";
-      hash = "sha256-GYdt6KMMmDSyby447MbShL2GbrH8R1UuOeiVlztGuS4=";
+      hash = "sha256-VeF6Sti1Ide2LchiCuPut/bdbJUv+5eTH2q0YMcniyA=";
     };
 
     build-system = [
