@@ -14,23 +14,21 @@
       trivLib = trivnixLib.lib.for { selfArg = self; };
     in
     {
-/**/
       packages.x86_64-linux =
         let
           system = "x86_64-linux";
           pkgs = import nixpkgs {
             inherit system;
             overlays = [
-              self.overlays.pyAdditions
+              self.overlays.python
             ];
           };
         in
         {
           python313Packages = {
-            inherit (pkgs.python313Packages) av_15 adbutils;
+            inherit (pkgs.python313Packages) av adbutils;
           };
         };
-/**/
 
       overlays =
         let
@@ -50,7 +48,7 @@
           default = final: prev: (self.overlays.additions final prev) // (self.overlays.overrides final prev);
 
           python =
-            final: prev: (self.overlays.pyAddtions final prev) // (self.overlays.pyOverrides final prev);
+            final: prev: (self.overlays.pyAdditions final prev) // (self.overlays.pyOverrides final prev);
 
           additions =
             _: pkgs:
