@@ -2,13 +2,34 @@
   description = "My Extra Packages";
 
   inputs.trivnixLib.url = "github:Trivaris/TrivnixLib";
-
+  # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+  
   outputs =
-    { trivnixLib, self }:
+    {
+      trivnixLib,
+      # nixpkgs,
+      self,
+    }:
     let
       trivLib = trivnixLib.lib.for { selfArg = self; };
     in
     {
+/*
+      packages.x86_64-linux =
+        let
+          system = "x86_64-linux";
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [
+              self.overlays.pyAddtions
+            ];
+          };
+        in
+        {
+          inherit (pkgs.python313Packages) av adbutils;
+        };
+*/
+
       overlays =
         let
           mkDrvs =
@@ -21,7 +42,7 @@
           additionDrvs = mkDrvs ./additions;
           overrideDrvs = mkDrvs ./overrides;
           additionPyDrvs = mkDrvs ./python/additions;
-          overridePyDrvs = mkDrvs ./python.overrides;
+          overridePyDrvs = mkDrvs ./python/overrides;
         in
         {
           default = final: prev: (self.overlays.additions final prev) // (self.overlays.overrides final prev);
@@ -69,8 +90,8 @@
               inherit (pkgs.lib) mapAttrs' nameValuePair;
             in
             {
-              python13Packages =
-                pkgs.python13Packages
+              python313Packages =
+                pkgs.python313Packages
                 // (mapAttrs' (
                   name: path: (nameValuePair name (pkgs.callPackage ./python/additions/${path} { inherit pkgs; }))
                 ) additionPyDrvs);
@@ -82,12 +103,14 @@
               inherit (pkgs.lib) mapAttrs' nameValuePair;
             in
             {
-              python13Packages =
-                pkgs.python13Packages
+              python313Packages =
+                pkgs.python313Packages
                 // (mapAttrs' (
                   name: path:
                   (nameValuePair name (
-                    pkgs.python13Packages.${name}.overrideAttrs (_: import ./python/overrides/${path} { inherit pkgs; })
+                    pkgs.python313Packages.${name}.overrideAttrs (
+                      _: import ./python/overrides/${path} { inherit pkgs; }
+                    )
                   ))
                 ) overridePyDrvs);
             };

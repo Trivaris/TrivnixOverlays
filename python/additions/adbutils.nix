@@ -1,20 +1,20 @@
 { pkgs, ... }:
 let
-  adbutils-src = {
+  adbutils = {
     pname = "adbutils";
     version = "2.10.2";
     format = "pyproject";
     doCheck = false;
-    nativeBuildInputs = [ pkgs.pbr ];
+    nativeBuildInputs = [ pkgs.python313Packages.pbr ];
     pythonImportsCheck = [ "adbutils" ];
-
+  
     src = pkgs.fetchPypi {
-      inherit (adbutils-src) pname version;
+      inherit (adbutils) pname version;
       sha256 = "sha256-NT0tTKbAt2tTxxfEHyyhDzzy0N5qpys+LS99oZvdxJU=";
     };
 
     propagatedBuildInputs = builtins.attrValues {
-      inherit (pkgs)
+      inherit (pkgs.python313Packages)
         requests
         deprecation
         retry2
@@ -23,4 +23,4 @@ let
     };
   };
 in
-pkgs.buildPythonPackage adbutils-src
+pkgs.python313Packages.buildPythonPackage adbutils
