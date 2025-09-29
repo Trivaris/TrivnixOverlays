@@ -84,7 +84,7 @@
               (nameValuePair name (pkgs.${name}.overrideAttrs (_: import ./overrides/${path} { inherit pkgs; })))
             ) overrideDrvs;
 
-          pyAddtions =
+          pyAdditions =
             _: pkgs:
             let
               inherit (pkgs.lib) mapAttrs' nameValuePair;
