@@ -1,5 +1,5 @@
 { pkgs, ... }:
-let 
+let
   av = {
     version = "15.1.0";
 
@@ -23,5 +23,5 @@ let
         ln -s ${testSamples} tests/assets
       '';
   };
-in 
+in
 av

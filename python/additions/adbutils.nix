@@ -7,7 +7,7 @@ let
     doCheck = false;
     nativeBuildInputs = [ pkgs.python313Packages.pbr ];
     pythonImportsCheck = [ "adbutils" ];
-  
+
     src = pkgs.fetchPypi {
       inherit (adbutils) pname version;
       sha256 = "sha256-NT0tTKbAt2tTxxfEHyyhDzzy0N5qpys+LS99oZvdxJU=";
