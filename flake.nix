@@ -21,10 +21,13 @@
             inherit system;
             overlays = [
               self.overlays.python
+              self.overlays.default
             ];
           };
         in
         {
+          inherit (pkgs) cfddns-middleware;
+
           python313Packages = {
             inherit (pkgs.python313Packages) av adbutils;
           };
@@ -77,22 +80,21 @@
         {
           default = final: prev: (self.overlays.additions final prev) // (self.overlays.overrides final prev);
 
-          python =
-            final: prev: {
-              python313Packages =
-                prev.python313Packages
-                // (mkAdditionOverlay {
-                  pkgs = prev;
-                  drvs = additionPyDrvs;
-                  flakePath = "python/additions";
-                })
-                // (mkOverrideOverlay {
-                  pkgs = prev;
-                  drvs = overridePyDrvs;
-                  flakePath = "python/overrides";
-                  pkgPath = "python313Packages";
-                });
-            };
+          python = final: prev: {
+            python313Packages =
+              prev.python313Packages
+              // (mkAdditionOverlay {
+                pkgs = prev;
+                drvs = additionPyDrvs;
+                flakePath = "python/additions";
+              })
+              // (mkOverrideOverlay {
+                pkgs = prev;
+                drvs = overridePyDrvs;
+                flakePath = "python/overrides";
+                pkgPath = "python313Packages";
+              });
+          };
 
           additions =
             _: pkgs:
