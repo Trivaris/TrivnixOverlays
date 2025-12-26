@@ -14,7 +14,14 @@
         builtins.listToAttrs (
           map (system: {
             name = system;
-            value = f (import nixpkgs { inherit system; config = { allowUnfree = true; }; });
+            value = f (
+              import nixpkgs {
+                inherit system;
+                config = {
+                  allowUnfree = true;
+                };
+              }
+            );
           }) systems
         );
 

@@ -10,7 +10,7 @@ let
     version = "v2.32.0";
 
     sourceRoot = ".";
-    
+
     src = fetchurl {
       url = "https://github.com/SteamClientHomebrew/Millennium/releases/download/${millennium.version}/millennium-${millennium.version}-linux-x86_64.tar.gz";
       hash = "sha256-kjXaanWedEpj0EqzIdn5qZrmJrk6l/Fb13+W5aD5Jiw=";
