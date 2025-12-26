@@ -1,6 +1,12 @@
-{ pkgs, ... }:
+{
+  python3Packages,
+  fetchFromGitHub,
+  python3,
+  lib,
+  ...
+}:
 let
-  py = pkgs.python3Packages;
+  py = python3Packages;
 
   cloudflare = py.buildPythonPackage {
     pname = "cloudflare";
@@ -29,7 +35,7 @@ py.buildPythonApplication {
   version = "unstable-2025-10-18";
   format = "other";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "L480";
     repo = "cloudflare-dyndns";
     rev = "main";
@@ -45,7 +51,7 @@ py.buildPythonApplication {
 
   installPhase = ''
     mkdir -p $out/bin
-    echo "#!${pkgs.python3.interpreter}" > $out/bin/cloudflare-dyndns
+    echo "#!${python3.interpreter}" > $out/bin/cloudflare-dyndns
     cat app.py >> $out/bin/cloudflare-dyndns
     chmod +x $out/bin/cloudflare-dyndns
   '';
@@ -53,6 +59,6 @@ py.buildPythonApplication {
   meta = {
     description = "Cloudflare DynDNS client for FRITZ!Box";
     homepage = "https://github.com/L480/cloudflare-dyndns";
-    license = pkgs.lib.licenses.mit;
+    license = lib.licenses.mit;
   };
 }

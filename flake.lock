@@ -2,27 +2,11 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1759132680,
-        "narHash": "sha256-G06Dm5tdW/979QOBsk1RB7igVEUlrPEn2L1bXSATnvo=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "2832ea42013e888a9b453b0390a40780c9b5b260",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable-small",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1755027561,
-        "narHash": "sha256-IVft239Bc8p8Dtvf7UAACMG5P3ZV+3/aO28gXpGtMXI=",
+        "lastModified": 1766651565,
+        "narHash": "sha256-QEhk0eXgyIqTpJ/ehZKg9IKS7EtlWxF3N7DXy42zPfU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "005433b926e16227259a1843015b5b2b7f7d1fc3",
+        "rev": "3e2499d5539c16d0d173ba53552a4ff8547f4539",
         "type": "github"
       },
       "original": {
@@ -34,26 +18,7 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "trivnixLib": "trivnixLib"
-      }
-    },
-    "trivnixLib": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1758782853,
-        "narHash": "sha256-fxVCXm57sS/tIbrQukNJNQLZRDuoOwJd8FlWrmq6zrs=",
-        "owner": "Trivaris",
-        "repo": "TrivnixLib",
-        "rev": "62e08f202142ce5ab869c7ee217a4bb7f8d550d5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Trivaris",
-        "repo": "TrivnixLib",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

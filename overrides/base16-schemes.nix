@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ fetchFromGitHub, ... }:
 {
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "tinted-theming";
     repo = "schemes";
     rev = "317a5e10c35825a6c905d912e480dfe8e71c7559";
