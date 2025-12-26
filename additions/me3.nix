@@ -17,6 +17,8 @@ let
     pname = "me3";
     version = "v0.7.0";
 
+    sourceRoot = ".";
+
     src = fetchurl {
       url = "https://github.com/garyttierney/me3/releases/download/${me3.version}/me3-linux-amd64.tar.gz";
       sha256 = "sha256-88WYgv82MShq35VgWaeBcmGJr6z5ktmlX73FcELRtXg=";
