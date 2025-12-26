@@ -6,7 +6,7 @@
 }:
 let
   ksud = {
-    pame = "ksud";
+    pname = "ksud";
     version = "v1.0.5";
 
     dontUnpack = true;
