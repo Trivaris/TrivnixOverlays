@@ -18,23 +18,21 @@
           }) systems
         );
 
-      getPkgs = pkgs: path:
-        pkgs.lib.pipe (builtins.readDir path) [
-          (pkgs.lib.filterAttrs (name: type: type == "regular" && pkgs.lib.hasSuffix ".nix" name))
+      getPkgs =
+        pkgs: lib: path:
+        lib.pipe (builtins.readDir path) [
+          (lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".nix" name))
           builtins.attrNames
           (map (filename: {
-            name = pkgs.lib.removeSuffix ".nix" filename;
-            value = pkgs.callPackage "${path}/${filename}" { };
+            name = lib.removeSuffix ".nix" filename;
+            value = pkgs.callPackage (path + "/${filename}") { };
           }))
           builtins.listToAttrs
         ];
     in
     {
-      packages = forEachSystem (
-        pkgs: getPkgs pkgs ./additions
-      );
+      packages = forEachSystem (pkgs: getPkgs pkgs pkgs.lib ./additions);
 
-      overlays.default = final: prev:
-        getPkgs final ./additions;
+      overlays.default = final: prev: getPkgs final prev.lib ./additions;
     };
 }
