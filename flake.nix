@@ -10,13 +10,13 @@
     {
       packages."x86_64-linux" =
         let
-          pkgs = import nixpkgs { system = "x86_64-linux"; };
+          pkgs = import nixpkgs { system = "x86_64-linux"; config.allowUnfree = true; };
           inherit (pkgs.lib) mapAttrs' nameValuePair removeSuffix;
         in
         mapAttrs' (
           name: value: nameValuePair (removeSuffix ".nix" name) (pkgs.callPackage (./additions/${name}) { })
         ) (builtins.readDir ./additions);
 
-      overlays.default = _: _: self."x86_64-linux".packages;
+      overlays.default = _: _: self.packages."x86_64-linux".packages;
     };
 }
