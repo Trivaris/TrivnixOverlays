@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Additional Pkgs to be used in nix";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -7,39 +7,16 @@
 
   outputs =
     { self, nixpkgs }:
-    let
-      systems = [ "x86_64-linux" ];
-      forEachSystem =
-        f:
-        builtins.listToAttrs (
-          map (system: {
-            name = system;
-            value = f (
-              import nixpkgs {
-                inherit system;
-                config = {
-                  allowUnfree = true;
-                };
-              }
-            );
-          }) systems
-        );
-
-      getPkgs =
-        pkgs: path:
-        pkgs.lib.pipe (builtins.readDir path) [
-          (pkgs.lib.filterAttrs (name: type: type == "regular" && pkgs.lib.hasSuffix ".nix" name))
-          builtins.attrNames
-          (map (filename: {
-            name = pkgs.lib.removeSuffix ".nix" filename;
-            value = pkgs.callPackage (path + "/${filename}") { };
-          }))
-          builtins.listToAttrs
-        ];
-    in
     {
-      packages = forEachSystem (pkgs: getPkgs pkgs ./additions);
+      packages."x86_64-linux" =
+        let
+          pkgs = import nixpkgs { system = "x86_64-linux"; };
+          inherit (pkgs.lib) mapAttrs' nameValuePair removeSuffix;
+        in
+        mapAttrs' (
+          name: value: nameValuePair (removeSuffix ".nix" name) (pkgs.callPackage (./additions/${name}) { })
+        ) (builtins.readDir ./additions);
 
-      overlays.default = _: prev: self.${prev.system}.packages;
+      overlays.default = _: _: self."x86_64-linux".packages;
     };
 }
