@@ -1,9 +1,7 @@
 {
   description = "Additional Pkgs to be used in nix";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-  };
+  inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
   outputs =
     { self, nixpkgs }:
@@ -17,6 +15,6 @@
           name: value: nameValuePair (removeSuffix ".nix" name) (pkgs.callPackage (./additions/${name}) { })
         ) (builtins.readDir ./additions);
 
-      overlays.default = _: _: self.packages."x86_64-linux".packages;
+      overlays.default = _: _: self.packages."x86_64-linux";
     };
 }
