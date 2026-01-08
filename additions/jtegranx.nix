@@ -1,6 +1,8 @@
 {
   fetchurl,
   stdenv,
+  makeWrapper,
+  jre21_minimal,
   ...
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -14,12 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
     mkdir -p $out/bin
+    mkdir -p $out/share/java
     mkdir -p $out/etc/udev/rules.d
 
-    cp $src $out/bin/JTegraNX.jar
-    chmod +x $out/bin/JTegraNX.jar
+    cp $src $out/share/java/JTegraNX.jar
+
+    makeWrapper ${jre21_minimal}/bin/java $out/bin/JTegraNX \
+      --add-flags "-jar $out/share/java/JTegraNX.jar"
 
     echo 'SUBSYSTEMS=="usb", ATTRS{manufacturer}=="NVIDIA Corp.", ATTRS{product}=="APX", GROUP="nintendo_switch", TAG+="uaccess"' > $out/etc/udev/rules.d/99-jtegranx.rules
   '';
