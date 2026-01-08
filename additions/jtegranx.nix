@@ -27,10 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/java
     mkdir -p $out/etc/udev/rules.d
 
-    cp $src $out/share/java/JTegraNX.jar
+    cp $src $out/share/java/jTegraNX.jar
 
-    makeWrapper ${jdk21}/bin/java $out/bin/JTegraNX \
-      --add-flags "-jar $out/share/java/JTegraNX.jar" \
+    makeWrapper ${jdk21}/bin/java $out/bin/jTegraNX \
+      --add-flags "-jar $out/share/java/jTegraNX.jar" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL glib ]}"
 
     echo 'SUBSYSTEMS=="usb", ATTRS{manufacturer}=="NVIDIA Corp.", ATTRS{product}=="APX", GROUP="nintendo_switch", TAG+="uaccess"' > $out/etc/udev/rules.d/99-jtegranx.rules
