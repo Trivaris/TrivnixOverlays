@@ -33,6 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "-jar $out/share/java/jTegraNX.jar" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL glib ]}"
 
-    echo 'SUBSYSTEMS=="usb", ATTRS{manufacturer}=="NVIDIA Corp.", ATTRS{product}=="APX", GROUP="nintendo_switch", TAG+="uaccess"' > $out/etc/udev/rules.d/99-jtegranx.rules
+    echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0955", ATTRS{idProduct}=="7321", MODE="0666"' > $out/etc/udev/rules.d/99-jtegranx.rules
   '';
 })
