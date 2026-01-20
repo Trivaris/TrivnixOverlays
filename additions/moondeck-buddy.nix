@@ -13,5 +13,18 @@ let
 in
 appimageTools.wrapType2 {
   inherit pname version src;
-  extraPackages = pkgs: [ ];
+  extraPkgs = pkgs: [
+    pkgs.libGL
+    pkgs.libglvnd
+    pkgs.stdenv.cc.cc.lib
+    pkgs.zlib
+    pkgs.fontconfig
+    pkgs.freetype
+    pkgs.xorg.libX11
+    pkgs.libgpg-error
+    pkgs.e2fsprogs
+    pkgs.libxkbcommon
+    pkgs.wayland
+    pkgs.dbus
+  ];
 }
