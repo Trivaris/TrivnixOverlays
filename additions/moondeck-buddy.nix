@@ -1,34 +1,64 @@
 {
-  fetchurl,
-  appimageTools,
-  ...
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  kdePackages,
+  cmake,
+  ninja,
+  qt6,
+  procps,
+  xorg,
+  steam,
+  useNixSteam ? true,
 }:
-let 
-  pname = "moondeck-buddy";
-  version = "1.9.2";
-  src = fetchurl {
-    url = "https://github.com/FrogTheFrog/moondeck-buddy/releases/download/v${version}/MoonDeckBuddy-${version}-x86_64.AppImage";
-    sha256 = "sha256-SfaqrBJJZlJwhSPLPUlwfvZ8RxIWrbwY6uys8ziRvek=";
-  };
+let
+  inherit (kdePackages) qtbase wrapQtAppsHook;
+  qtEnv =
+    with qt6;
+    env "qt-env-custom-${qtbase.version}" [
+      qthttpserver
+      qtwebsockets
+    ];
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
-  extraPkgs = pkgs: [
-    pkgs.steam
-    pkgs.which
-    pkgs.flatpak
-    
-    pkgs.libGL
-    pkgs.libglvnd
-    pkgs.stdenv.cc.cc.lib
-    pkgs.zlib
-    pkgs.fontconfig
-    pkgs.freetype
-    pkgs.xorg.libX11
-    pkgs.libgpg-error
-    pkgs.e2fsprogs
-    pkgs.libxkbcommon
-    pkgs.wayland
-    pkgs.dbus
+stdenv.mkDerivation (finalAttrs: {
+  pname = "moondeck-buddy";
+  version = "1.9.1";
+
+  src = fetchFromGitHub {
+    owner = "FrogTheFrog";
+    repo = "moondeck-buddy";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-ASqEyhELzOz0sU5sysluay0pMqiBj1lFCEWMQ0oe8YE=";
+  };
+
+  buildInputs = [
+    procps
+    xorg.libXrandr
+    qtbase
+    qtEnv
   ];
-}
+  nativeBuildInputs = [
+    cmake
+    ninja
+    wrapQtAppsHook
+  ];
+
+  postPatch = lib.optionalString useNixSteam ''
+    substituteInPlace src/lib/shared/appmetadata.cpp \
+      --replace-fail /usr/bin/steam ${lib.getExe steam};
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    mainProgram = "MoonDeckBuddy";
+    description = "Helper to work with moonlight on a steamdeck";
+    homepage = "https://github.com/FrogTheFrog/moondeck-buddy";
+    changelog = "https://github.com/FrogTheFrog/moondeck-buddy/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ redxtech ];
+    platforms = lib.platforms.linux;
+  };
+})
