@@ -51,4 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  meta = {
+    mainProgram = "MoonDeckBuddy";
+    description = "Helper to work with moonlight on a steamdeck";
+    homepage = "https://github.com/FrogTheFrog/moondeck-buddy";
+    changelog = "https://github.com/FrogTheFrog/moondeck-buddy/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ redxtech ];
+    platforms = lib.platforms.linux;
+  };
 })
