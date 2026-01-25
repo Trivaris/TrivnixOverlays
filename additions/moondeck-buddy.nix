@@ -14,6 +14,10 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
   extraPkgs = pkgs: [
+    pkgs.steam
+    pkgs.which
+    pkgs.flatpak
+    
     pkgs.libGL
     pkgs.libglvnd
     pkgs.stdenv.cc.cc.lib
