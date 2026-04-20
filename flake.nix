@@ -12,7 +12,7 @@
           inherit (pkgs.lib) mapAttrs' nameValuePair removeSuffix;
         in
         mapAttrs' (
-          name: value: nameValuePair (removeSuffix ".nix" name) (pkgs.callPackage (./additions/${name}) { })
+          name: value: nameValuePair (removeSuffix ".nix" name) (pkgs.callPackage ./additions/${name} { })
         ) (builtins.readDir ./additions);
 
       overlays.default = _: _: self.packages."x86_64-linux";

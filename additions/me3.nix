@@ -3,9 +3,9 @@
   autoPatchelfHook,
   makeWrapper,
   gcc,
-  xorg,
   glibc,
   libGL,
+  libX11,
   zlib,
   steam-run,
   stdenv,
@@ -31,7 +31,7 @@ let
 
     buildInputs = [
       gcc.cc.lib
-      xorg.libX11
+      libX11
       glibc
       libGL
       zlib

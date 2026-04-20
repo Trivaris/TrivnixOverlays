@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp $src $out/share/java/jTegraNX.jar
 
-    makeWrapper ${jdk21}/bin/java $out/bin/jTegraNX \
+    makeWrapper ${jdk21}/bin/java $out/bin/JTegraNX \
       --add-flags "-jar $out/share/java/jTegraNX.jar" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL glib ]}"
 
