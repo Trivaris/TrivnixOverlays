@@ -60,5 +60,6 @@ py.buildPythonApplication {
     description = "Cloudflare DynDNS client for FRITZ!Box";
     homepage = "https://github.com/L480/cloudflare-dyndns";
     license = lib.licenses.mit;
+    mainProgram = "cloudflare-dyndns";
   };
 }
