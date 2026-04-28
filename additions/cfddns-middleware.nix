@@ -38,8 +38,8 @@ py.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "L480";
     repo = "cloudflare-dyndns";
-    rev = "main";
-    sha256 = "sha256-lTNj/m3SYvbRzNjlkEjlmepZDfYXp2Fp01kq+eMAnTg=";
+    rev = "6eb8cf53c2fb0632d126733194facab396888d4a";
+    sha256 = "sha256-bECVhjn2mk0qHKtfcdSTUu31mcwzDYGbZjuLYi0S900=";
   };
 
   propagatedBuildInputs = [
