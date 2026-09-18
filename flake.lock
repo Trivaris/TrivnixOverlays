@@ -50,7 +50,7 @@
         "type": "github"
       }
     },
-    "qml-lsp": {
+    "qml-language-server": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs_2"
@@ -72,7 +72,7 @@
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
-        "qml-lsp": "qml-lsp"
+        "qml-language-server": "qml-language-server"
       }
     },
     "systems": {
